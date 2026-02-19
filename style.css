@@ -12,38 +12,30 @@ input[type=number], input[type=text] {
 }
 
 #ladderContainer {
+  position: relative; /* 자식 요소(absolute)들의 기준점 */
   margin: 40px auto;
-  position: relative; /* 자식 요소들의 기준점 */
-  width: 550px;       /* 7명 기준 넉넉한 너비 */
-  min-height: 450px;  /* 세로 공간 확보 */
   background: #fff;
   border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  padding: 0;         /* 패딩 초기화 (JS에서 좌표로 제어) */
+  overflow: visible;  /* 내용이 늘어나도 잘리지 않음 */
 }
 
 .ladder-start, .ladder-end {
   position: absolute;
-  width: 70px;
+  width: 100px;       /* 텍스트 너비 넉넉히 확보 */
   text-align: center;
+  transform: translateX(-50%); /* 핵심: 설정된 left 좌표를 기준으로 중앙 정렬 */
   font-weight: bold;
-  transform: translateX(-50%); /* 선의 중앙에 텍스트 배치 */
-  word-break: break-all;
-  line-height: 1.2;
+  z-index: 10;
 }
-
-.ladder-start { top: 20px; }
-.ladder-end { bottom: 20px; }
 
 .ladder-line {
   position: absolute;
   background: #444;
+  border-radius: 2px;
 }
 
 .ladder-vertical {
   width: 4px;
-  height: 330px; /* 사다리 세로 길이 고정 */
-  top: 50px;     /* 상단 이름 아래에서 시작 */
 }
 
 .ladder-horizontal {
