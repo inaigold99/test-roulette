@@ -50,14 +50,31 @@ input[type=number], input[type=text] {
   /* width는 JS에서 gap만큼 할당 */
 }
 
-.result-item {
-  margin: 6px auto;
-  padding: 8px;
-  background: #cde;
-  border-radius: 12px;
-  width: 330px;
-  font-size: 1.2rem;
+#gameWrapper {
+  max-width: 1200px;
+  margin: 0 auto;
 }
+
+#results {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 250px;
+  text-align: left; /* 결과 텍스트 왼쪽 정렬 */
+}
+
+.result-item {
+  margin: 0; /* 기존 margin 제거 */
+  padding: 12px 20px;
+  background: #ffffff;
+  border-left: 5px solid #44b; /* 디자인 포인트 */
+  border-radius: 8px;
+  width: auto; /* 너비 자동 조절 */
+  font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  white-space: nowrap;
+}
+
 button {
   font-size: 1rem;
   padding: 6px 18px;

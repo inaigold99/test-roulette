@@ -103,10 +103,14 @@ function runLadder(count, crossings){
 }
 
 // 결과 표시
-function showResults(starts, ends, mapping){
-  let html = '';
-  for(let i=0;i<starts.length;i++){
-    html += `<div class='result-item'>🧑 ${starts[i]} → 🎁 ${ends[mapping[i]]}</div>`;
+function showResults(starts, ends, mapping) {
+  let html = '<h3 style="margin-bottom: 15px;">🏁 당첨 결과</h3>';
+  for (let i = 0; i < starts.length; i++) {
+    html += `
+      <div class='result-item'>
+        <strong>${starts[i]}</strong>님은 <br>
+        <span style="color: #44b;">👉 ${ends[mapping[i]]}</span> 당첨!
+      </div>`;
   }
   document.getElementById('results').innerHTML = html;
 }
