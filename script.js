@@ -1,130 +1,89 @@
-// 각 마블의 경로 상태 및 결과를 저장
-function startMarbles() {
-  const finalResult = document.getElementById('finalResult');
-  finalResult.textContent = "";
+// 참가자 입력 생성
+function setupFields() {
+  const count = Math.min(7, Math.max(1, parseInt(document.getElementById('playerCount').value)));
+  document.getElementById('ladderForm').style.display = 'block';
 
-  // 마블 초기 위치
-  const marbles = [
-    { id: "marble1", left: 45, top: 0, color: '#0ff', result: null },
-    { id: "marble2", left: 105, top: 0, color: '#0f0', result: null },
-    { id: "marble3", left: 165, top: 0, color: '#f0f', result: null }
-  ];
-  
-  marbles.forEach((m,i) => {
-    let marble = document.getElementById(m.id);
-    marble.style.left = m.left+'px';
-    marble.style.top = m.top+'px';
-    marble.style.background = m.color;
-  });
-
-  let finishedCount = 0;
-  let marbleStatus = [false,false,false];
-
-  // 각각 마블을 애니메이션
-  marbles.forEach((m, idx) => {
-    animateMarble(m, idx);
-  });
-
-  function animateMarble(m, idx) {
-    let y = m.top;
-    let x = m.left;
-    let stage = 0; // 0 : 첫 세로, 1~3 : 가로, 4: 마지막 세로
-    // 각 장애물 위치 예시:
-    const obstacles = [
-      { x:70, y:100 }, // stage 1
-      { x:150, y:180 }, // stage 2
-      { x:70, y:220 }   // stage 3
-    ];
-    // 마블 애니메이션 진행
-    function move() {
-      // 세로 1
-      if (stage === 0) {
-        if (y < 70) {
-          y += 2;
-          setMarblePos(m.id, x, y);
-          setTimeout(move, 15);
-        } else {
-          // 가로1
-          stage++;
-          horizontalMove(1);
-        }
-      }
-      // 세로 2
-      else if (stage === 4) {
-        if (y < 325) {
-          y += 2;
-          setMarblePos(m.id, x, y);
-          setTimeout(move, 15);
-        } else {
-          // 결과 판정
-          marbleStatus[idx]=true;
-          m.result = (x<100) ? "A" : "B";
-          checkAllFinished();
-        }
-      }
-    }
-    // 가로로 이동(가로 stage = 1,2,3)
-    function horizontalMove(stageNum) {
-      let maxHoriz = 120; // 이동 길이
-      let horizDist = 0;
-      let moveDir = Math.random()<0.5?-1:1; // -1: 왼쪽, 1: 오른쪽
-      function goHoriz() {
-        if (horizDist < maxHoriz) {
-          // 장애물 체크! 장애물 가까우면 방향전환
-          const obs = obstacles[stageNum-1];
-          if (Math.abs(x-obs.x)<12 && Math.abs(y-obs.y)<12) {
-            // 장애물 효과: 방향 전환 or 랜덤 멈춤
-            moveDir = Math.random()<0.5 ? -moveDir : moveDir;
-            horizDist += 15; // 장애물에서 약간 멈춤 효과
-          }
-          x += moveDir*2;
-          horizDist += 2;
-          setMarblePos(m.id, x, y);
-          setTimeout(goHoriz, 15);
-        } else {
-          // 다음 세로로
-          stage++;
-          y += 2;
-          setMarblePos(m.id, x, y);
-          verticalMove();
-        }
-      }
-      goHoriz();
-    }
-    // 세로로 이동
-    function verticalMove() {
-      let yTarget = [150, 230, 325][stage-1];
-      function goDown() {
-        if (y < yTarget) {
-          y += 2;
-          setMarblePos(m.id, x, y);
-          setTimeout(goDown, 15);
-        } else {
-          if (stage<4) {
-            horizontalMove(stage);
-          } else {
-            move(); // 마지막 세로
-          }
-        }
-      }
-      goDown();
-    }
-    // 마블 위치 업데이트
-    function setMarblePos(id, left, top) {
-      const marble = document.getElementById(id);
-      marble.style.left = left+'px';
-      marble.style.top = top+'px';
-    }
-    move();
+  let startNames = '';
+  let endNames = '';
+  for(let i=1; i<=count; i++){
+    startNames += `<input type="text" id="start${i}" placeholder="이름${i}" style="width:80px;margin:2px;">`;
+    endNames   += `<input type="text" id="end${i}" placeholder="상품${i}" style="width:80px;margin:2px;">`;
   }
+  document.getElementById('startNames').innerHTML = startNames;
+  document.getElementById('endNames').innerHTML = endNames;
+}
 
-  // 모두 끝나면 결과 출력
-  function checkAllFinished() {
-    if (marbleStatus.every(v=>v)) {
-      const marble1 = marbles[0];
-      const marble2 = marbles[1];
-      const marble3 = marbles[2];
-      finalResult.textContent = `결과: [1번:${marble1.result}] [2번:${marble2.result}] [3번:${marble3.result}]`;
-    }
+// 사다리 게임 시작
+function startLadderGame() {
+  const count = Math.min(7, Math.max(1, parseInt(document.getElementById('playerCount').value)));
+  let starts = [], ends = [];
+  for(let i=1;i<=count;i++){
+    let sn = document.getElementById('start'+i).value.trim() || `이름${i}`;
+    let en = document.getElementById('end'+i).value.trim() || `상품${i}`;
+    starts.push(sn);
+    ends.push(en);
   }
+  // 사다리를 랜덤 생성
+  let crossings = genCrossings(count, 12);
+  drawLadder(count, crossings, starts, ends);
+  let mapping = runLadder(count, crossings);
+  showResults(starts, ends, mapping);
+}
+
+// 사다리 랜덤 가로선 생성
+function genCrossings(count, numLines){
+  let cross = [];
+  for(let l=0; l<numLines; l++){
+    let x = Math.floor(Math.random()*(count-1));  // 어느 줄에 놓을건지
+    let y = 36 + l*22; // y좌표(높이) 간격 조정
+    cross.push({x:x, y:y});
+  }
+  return cross;
+}
+
+// 사다리 그리기
+function drawLadder(count, crossings, starts, ends){
+  const container = document.getElementById('ladderContainer');
+  container.innerHTML = '';
+  const width = 60, gap = 55;
+  // 시작/끝 이름
+  for(let i=0; i<count; i++){
+    container.innerHTML += `<div class='ladder-start' style="left:${width + i*gap}px;">${starts[i]}</div>`;
+    container.innerHTML += `<div class='ladder-end' style="left:${width + i*gap}px;">${ends[i]}</div>`;
+    // 세로 줄
+    container.innerHTML += `<div class='ladder-line ladder-vertical' style="left:${width + i*gap + 28}px;top:34px;"></div>`;
+  }
+  // 가로줄
+  crossings.forEach((c)=>{
+    container.innerHTML += `<div class='ladder-line ladder-horizontal' style="left:${width + c.x*gap + 28}px;top:${c.y}px;width:${gap}px;"></div>`;
+  });
+}
+
+// 사다리 이동 결과 계산
+function runLadder(count, crossings){
+  // 각 출발점에서 끝까지 이동
+  let result = [];
+  for(let start=0; start<count; start++){
+    let x = start;
+    for(let i=0, y=36;i<crossings.length;i++,y+=22){
+      // 이 y에서 가로줄이 있으면 x 이동
+      const found = crossings.filter(c=>c.y===y && (c.x===x || c.x===x-1));
+      if(found.length){
+        // 오른쪽에 가로줄이 있으면 오른쪽으로
+        if(found[0].x===x) x++;
+        else if(found[0].x===x-1) x--;
+      }
+    }
+    result.push(x);
+  }
+  return result;
+}
+
+// 결과 표시
+function showResults(starts, ends, mapping){
+  let html = '';
+  for(let i=0;i<starts.length;i++){
+    html += `<div class='result-item'>🧑 ${starts[i]} → 🎁 ${ends[mapping[i]]}</div>`;
+  }
+  document.getElementById('results').innerHTML = html;
 }

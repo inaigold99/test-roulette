@@ -1,94 +1,54 @@
 body {
   font-family: 'Noto Sans KR', sans-serif;
   text-align: center;
-  background: #eef;
+  background: #f5faff;
+  margin: 0;
+  padding: 0;
 }
-
-.h-container {
-  position: relative;
-  width: 220px;
-  height: 350px;
+section {
+  margin: 20px auto;
+}
+input[type=number] {
+  width: 60px;
+  font-size: 1rem;
+  padding: 3px;
+}
+#ladderContainer {
   margin: 40px auto 20px;
+  position: relative;
+  width: 420px;
+  height: 350px;
   background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  overflow-x: auto;
 }
-
-.left-bar {
+.ladder-start, .ladder-end {
   position: absolute;
-  left: 45px;
-  top: 0;
-  width: 14px;
-  height: 330px;
+  width: 60px;
+  text-align: center;
+  font-weight: bold;
+  padding: 2px 5px;
+}
+.ladder-start { top: 10px; }
+.ladder-end { top: 320px; }
+.ladder-line {
+  position: absolute;
   background: #444;
-  border-radius: 8px;
+  border-radius: 6px;
 }
-
-.middle-bar1, .middle-bar2, .middle-bar3 {
-  position: absolute;
-  left: 45px;
-  width: 134px;
-  height: 14px;
-  background: #444;
-  border-radius: 8px;
+.ladder-vertical {
+  width: 4px;
+  height: 315px;
 }
-.middle-bar1 { top: 70px; }
-.middle-bar2 { top: 150px; }
-.middle-bar3 { top: 230px; }
-
-.right-bar {
-  position: absolute;
-  left: 165px;
-  top: 70px;
-  width: 14px;
-  height: 260px;
-  background: #444;
-  border-radius: 8px;
+.ladder-horizontal {
+  height: 4px;
 }
-
-.marble {
-  position: absolute;
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  background: #09f;
-  z-index: 2;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  border: 2px solid #fff;
-  transition: left 0.2s, top 0.2s;
-}
-
-.result.left {
-  position: absolute;
-  left: 35px;
-  top: 325px;
-  background: #bfffcf;
-  padding: 8px 14px;
+.result-item {
+  margin: 6px auto;
+  padding: 8px;
+  background: #cde;
   border-radius: 12px;
-  font-weight: bold;
-}
-.result.right {
-  position: absolute;
-  left: 155px;
-  top: 325px;
-  background: #ffcfcf;
-  padding: 8px 14px;
-  border-radius: 12px;
-  font-weight: bold;
-}
-
-.obstacle {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  background: #ffab00;
-  border-radius: 50%;
-  border: 2px solid #444;
-  z-index: 3;
-}
-
-.final-result {
-  margin-top: 20px;
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #333;
+  width: 330px;
+  font-size: 1.2rem;
 }
