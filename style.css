@@ -12,43 +12,38 @@ input[type=number], input[type=text] {
 }
 
 #ladderContainer {
-  margin: 40px auto 20px;
-  position: relative;
-  /* 고정 너비와 높이 해제 */
-  width: fit-content; 
-  min-width: 300px;
-  /* 상하단 여백을 충분히 주어 텍스트 공간 확보 */
-  padding: 80px 40px; 
+  margin: 40px auto;
+  position: relative; /* 자식 요소들의 기준점 */
+  width: 550px;       /* 7명 기준 넉넉한 너비 */
+  min-height: 450px;  /* 세로 공간 확보 */
   background: #fff;
   border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  /* 내부 요소가 삐져나가지 않도록 설정 */
-  overflow: visible; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 0;         /* 패딩 초기화 (JS에서 좌표로 제어) */
 }
 
-.ladder-start { 
+.ladder-start, .ladder-end {
   position: absolute;
-  top: 25px; /* 상단 여백 확대 */
-  width: 80px;
-  transform: translateX(-50%);
+  width: 70px;
   text-align: center;
   font-weight: bold;
+  transform: translateX(-50%); /* 선의 중앙에 텍스트 배치 */
+  word-break: break-all;
+  line-height: 1.2;
 }
 
-.ladder-end { 
+.ladder-start { top: 20px; }
+.ladder-end { bottom: 20px; }
+
+.ladder-line {
   position: absolute;
-  /* bottom 기준으로 배치하여 사다리 선과 절대 겹치지 않게 함 */
-  bottom: 25px; 
-  width: 80px;
-  transform: translateX(-50%);
-  text-align: center;
-  font-weight: bold;
+  background: #444;
 }
 
 .ladder-vertical {
   width: 4px;
-  /* 가로줄(y좌표)들의 최대치보다 길게 설정 */
-  height: 320px; 
+  height: 330px; /* 사다리 세로 길이 고정 */
+  top: 50px;     /* 상단 이름 아래에서 시작 */
 }
 
 .ladder-horizontal {

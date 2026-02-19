@@ -45,33 +45,36 @@ function genCrossings(count, numLines){
 }
 
 // 사다리 그리기
-function drawLadder(count, crossings, starts, ends) {
+function drawLadder(count, crossings, starts, ends){
   const container = document.getElementById('ladderContainer');
   container.innerHTML = '';
   
-  // 7명일 때도 한 화면에 들어오도록 간격을 55px로 조정
-  const startX = 40; 
-  const gap = 55;    
-  const ladderTop = 60; // 사다리 세로선이 시작되는 높이
+  const startX = 50;  // 왼쪽 여백
+  const gap = 75;    // 줄 사이 간격
+  const ladderTop = 50; // 세로줄 시작 높이
+  const ladderHeight = 330; // 세로줄 전체 길이
 
-  for (let i = 0; i < count; i++) {
-    const currentX = startX + i * gap;
+  // 컨테이너 너비를 인원수에 맞게 자동 조정 (스크롤 방지)
+  container.style.width = (startX * 2 + (count - 1) * gap) + "px";
+
+  for(let i=0; i<count; i++){
+    let currentX = startX + i * gap;
     
-    // 시작 이름
+    // 1. 이름 (상단)
     container.innerHTML += `<div class='ladder-start' style="left:${currentX}px;">${starts[i]}</div>`;
     
-    // 끝 상품 (CSS의 bottom: 25px와 연동됨)
-    container.innerHTML += `<div class='ladder-end' style="left:${currentX}px;">${ends[i]}</div>`;
-    
-    // 세로줄
+    // 2. 세로줄
     container.innerHTML += `<div class='ladder-line ladder-vertical' style="left:${currentX - 2}px; top:${ladderTop}px;"></div>`;
+    
+    // 3. 상품 (하단) - 세로줄 끝점 바로 아래 배치
+    container.innerHTML += `<div class='ladder-end' style="left:${currentX}px; top:${ladderTop + ladderHeight + 10}px;">${ends[i]}</div>`;
   }
 
-  // 가로줄
-  crossings.forEach((c) => {
-    const currentX = startX + c.x * gap;
-    // 세로줄의 범위 안에서 가로줄이 그려지도록 좌표 설정
-    container.innerHTML += `<div class='ladder-line ladder-horizontal' style="left:${currentX}px; top:${ladderTop + c.y}px; width:${gap}px;"></div>`;
+  // 4. 가로줄
+  crossings.forEach((c)=>{
+    let currentX = startX + c.x * gap;
+    // c.y는 36부터 시작하므로 세로줄 범위 내에 적절히 배치됨
+    container.innerHTML += `<div class='ladder-line ladder-horizontal' style="left:${currentX}px; top:${ladderTop + (c.y - 30)}px; width:${gap}px;"></div>`;
   });
 }
 
