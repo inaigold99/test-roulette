@@ -49,32 +49,33 @@ function drawLadder(count, crossings, starts, ends) {
   const container = document.getElementById('ladderContainer');
   container.innerHTML = '';
   
-  const startX = 60;      // 왼쪽 시작 여백
-  const gap = 80;         // 줄 사이 간격
-  const ladderTop = 60;   // 세로선 시작 Y좌표
-  const ladderHeight = 350; // 세로선 길이 (가로줄들이 이 안에 그려짐)
+  const startX = 60;        // 첫 번째 줄의 왼쪽 여백
+  const gap = 80;          // 줄 사이의 간격
+  const ladderTop = 60;     // 세로선이 시작되는 y좌표
+  const ladderHeight = 350; // 세로선의 총 길이
 
-  // 컨테이너 크기 동적 조절 (7명 입력 시에도 여유로움)
-  container.style.width = (startX * 2 + (count - 1) * gap) + "px";
-  container.style.height = (ladderTop + ladderHeight + 80) + "px";
+  // 1. 컨테이너 크기 설정 (스크롤 없이 한눈에 보기 위해)
+  const totalWidth = startX * 2 + (count - 1) * gap;
+  container.style.width = totalWidth + "px";
+  container.style.height = (ladderTop + ladderHeight + 60) + "px";
 
   for (let i = 0; i < count; i++) {
     const currentX = startX + i * gap;
     
-    // 1. 이름 (상단) - 선 중앙 정렬
+    // 2. 시작 이름 (상단)
     container.innerHTML += `<div class='ladder-start' style="left:${currentX}px; top:20px;">${starts[i]}</div>`;
     
-    // 2. 세로줄 - 두께 보정(-2px)
+    // 3. 세로줄 (중앙 정렬을 위해 두께의 절반인 2px 차감)
     container.innerHTML += `<div class='ladder-line ladder-vertical' style="left:${currentX - 2}px; top:${ladderTop}px; height:${ladderHeight}px;"></div>`;
     
-    // 3. 상품 (하단) - 세로줄 바로 아래 배치
-    container.innerHTML += `<div class='ladder-end' style="left:${currentX}px; top:${ladderTop + ladderHeight + 15}px;">${ends[i]}</div>`;
+    // 4. 상품 (하단 - 사다리 끝점에서 20px 아래)
+    container.innerHTML += `<div class='ladder-end' style="left:${currentX}px; top:${ladderTop + ladderHeight + 20}px;">${ends[i]}</div>`;
   }
 
-  // 4. 가로줄 (다리) - 생성된 y값이 세로줄 범위 내에 오도록 보정
+  // 5. 가로줄 (다리) - 세로줄 사이를 정확히 연결
   crossings.forEach((c) => {
     const bridgeX = startX + c.x * gap;
-    // genCrossings의 y값이 ladderHeight를 넘지 않도록 위치 계산
+    // 가로줄이 세로선 범위 내에 골고루 배치되도록 y좌표 보정
     const bridgeY = ladderTop + (c.y % (ladderHeight - 40)) + 20; 
     container.innerHTML += `<div class='ladder-line ladder-horizontal' style="left:${bridgeX}px; top:${bridgeY}px; width:${gap}px;"></div>`;
   });
