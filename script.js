@@ -45,19 +45,32 @@ function genCrossings(count, numLines){
 }
 
 // 사다리 그리기
-function drawLadder(count, crossings, starts, ends){
+function drawLadder(count, crossings, starts, ends) {
   const container = document.getElementById('ladderContainer');
   container.innerHTML = '';
-  const width = 60, gap = 55;
-  // 시작/끝 이름
-  for(let i=0; i<count; i++){
-    container.innerHTML += `<div class='ladder-start' style="left:${width + i*gap}px;">${starts[i]}</div>`;
-    container.innerHTML += `<div class='ladder-end' style="left:${width + i*gap}px;">${ends[i]}</div>`;
-    container.innerHTML += `<div class='ladder-line ladder-vertical' style="left:${width + i*gap + 28}px;top:34px;"></div>`;
+  
+  const startX = 50; // 시작 X 좌표
+  const gap = 70;    // 줄 사이 간격 확대
+  const ladderTop = 50; // 사다리 선이 시작되는 y좌표
+
+  for (let i = 0; i < count; i++) {
+    const currentX = startX + i * gap;
+    
+    // 시작 이름 (상단)
+    container.innerHTML += `<div class='ladder-start' style="left:${currentX}px;">${starts[i]}</div>`;
+    
+    // 끝 상품 (하단) - 사다리 길이(300px) + 시작점(50px) + 여백
+    container.innerHTML += `<div class='ladder-end' style="left:${currentX}px;">${ends[i]}</div>`;
+    
+    // 세로줄 - 이름과 겹치지 않게 ladderTop부터 시작
+    container.innerHTML += `<div class='ladder-line ladder-vertical' style="left:${currentX - 2}px; top:${ladderTop}px;"></div>`;
   }
+
   // 가로줄
-  crossings.forEach((c)=>{
-    container.innerHTML += `<div class='ladder-line ladder-horizontal' style="left:${width + c.x*gap + 28}px;top:${c.y}px;width:${gap}px;"></div>`;
+  crossings.forEach((c) => {
+    const currentX = startX + c.x * gap;
+    // 가로줄 위치도 ladderTop을 기준으로 계산
+    container.innerHTML += `<div class='ladder-line ladder-horizontal' style="left:${currentX}px; top:${ladderTop + c.y}px; width:${gap}px;"></div>`;
   });
 }
 

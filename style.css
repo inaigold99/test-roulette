@@ -14,35 +14,37 @@ input[type=number], input[type=text] {
 #ladderContainer {
   margin: 40px auto 20px;
   position: relative;
-  width: 420px;
-  height: 350px;
+  width: fit-content; /* 참가자 수에 맞게 너비 조절 */
+  min-width: 420px;
+  padding: 60px 20px; /* 상하단 이름/상품 공간 확보 */
   background: #fff;
   border-radius: 20px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  overflow-x: auto;
+  /* height: 350px; <- 삭제 (세로로 자동 확장됨) */
 }
 
-.ladder-start, .ladder-end {
-  position: absolute;
-  width: 60px;
-  text-align: center;
-  font-weight: bold;
-  padding: 2px 5px;
+.ladder-start { 
+  top: 15px; /* 위쪽 여백 */
+  transform: translateX(-50%); /* 중앙 정렬 보정 */
 }
-.ladder-start { top: 10px; }
-.ladder-end { top: 320px; }
+
+.ladder-end { 
+  bottom: 15px; /* 아래쪽 여백 */
+  top: auto; /* 기존 top 제거 */
+  transform: translateX(-50%);
+}
+
 .ladder-line {
   position: absolute;
   background: #444;
   border-radius: 6px;
 }
+
 .ladder-vertical {
   width: 4px;
-  height: 315px;
+  height: 300px; /* 사다리 선의 길이를 적절히 고정 */
 }
-.ladder-horizontal {
-  height: 4px;
-}
+
 .result-item {
   margin: 6px auto;
   padding: 8px;
