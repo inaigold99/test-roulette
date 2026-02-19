@@ -14,35 +14,45 @@ input[type=number], input[type=text] {
 #ladderContainer {
   margin: 40px auto 20px;
   position: relative;
-  width: fit-content; /* 참가자 수에 맞게 너비 조절 */
-  min-width: 420px;
-  padding: 60px 20px; /* 상하단 이름/상품 공간 확보 */
+  /* 고정 너비와 높이 해제 */
+  width: fit-content; 
+  min-width: 300px;
+  /* 상하단 여백을 충분히 주어 텍스트 공간 확보 */
+  padding: 80px 40px; 
   background: #fff;
   border-radius: 20px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  /* height: 350px; <- 삭제 (세로로 자동 확장됨) */
+  /* 내부 요소가 삐져나가지 않도록 설정 */
+  overflow: visible; 
 }
 
 .ladder-start { 
-  top: 15px; /* 위쪽 여백 */
-  transform: translateX(-50%); /* 중앙 정렬 보정 */
+  position: absolute;
+  top: 25px; /* 상단 여백 확대 */
+  width: 80px;
+  transform: translateX(-50%);
+  text-align: center;
+  font-weight: bold;
 }
 
 .ladder-end { 
-  bottom: 15px; /* 아래쪽 여백 */
-  top: auto; /* 기존 top 제거 */
-  transform: translateX(-50%);
-}
-
-.ladder-line {
   position: absolute;
-  background: #444;
-  border-radius: 6px;
+  /* bottom 기준으로 배치하여 사다리 선과 절대 겹치지 않게 함 */
+  bottom: 25px; 
+  width: 80px;
+  transform: translateX(-50%);
+  text-align: center;
+  font-weight: bold;
 }
 
 .ladder-vertical {
   width: 4px;
-  height: 300px; /* 사다리 선의 길이를 적절히 고정 */
+  /* 가로줄(y좌표)들의 최대치보다 길게 설정 */
+  height: 320px; 
+}
+
+.ladder-horizontal {
+  height: 4px;
 }
 
 .result-item {
