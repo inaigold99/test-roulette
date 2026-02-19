@@ -1,21 +1,24 @@
-// 참가자 입력 생성
-function setupFields() {
+function confirmPlayerCount() {
+  // 읽어오기 및 값 제한
   const count = Math.min(7, Math.max(1, parseInt(document.getElementById('playerCount').value)));
-  document.getElementById('ladderForm').style.display = 'block';
-
-  let startNames = '';
-  let endNames = '';
+  // 참가자 및 상품 입력창 생성
+  let html = '<h3>시작지점 이름 입력</h3>';
   for(let i=1; i<=count; i++){
-    startNames += `<input type="text" id="start${i}" placeholder="이름${i}" style="width:80px;margin:2px;">`;
-    endNames   += `<input type="text" id="end${i}" placeholder="상품${i}" style="width:80px;margin:2px;">`;
+    html += `<input type="text" id="start${i}" placeholder="이름${i}" style="width:80px;margin:2px;">`;
   }
-  document.getElementById('startNames').innerHTML = startNames;
-  document.getElementById('endNames').innerHTML = endNames;
+  html += '<h3 style="margin-top:10px;">끝지점 상품 입력</h3>';
+  for(let i=1; i<=count;i++){
+    html += `<input type="text" id="end${i}" placeholder="상품${i}" style="width:80px;margin:2px;">`;
+  }
+  // Start 버튼 추가
+  html += `<div><button onclick="startLadderGame(${count})">Start</button></div>`;
+  document.getElementById('setupArea').innerHTML = html;
+  document.getElementById('setupArea').style.display = 'block';
+  document.getElementById('ladderContainer').innerHTML = '';
+  document.getElementById('results').innerHTML = '';
 }
 
-// 사다리 게임 시작
-function startLadderGame() {
-  const count = Math.min(7, Math.max(1, parseInt(document.getElementById('playerCount').value)));
+function startLadderGame(count) {
   let starts = [], ends = [];
   for(let i=1;i<=count;i++){
     let sn = document.getElementById('start'+i).value.trim() || `이름${i}`;
@@ -23,7 +26,7 @@ function startLadderGame() {
     starts.push(sn);
     ends.push(en);
   }
-  // 사다리를 랜덤 생성
+  // 랜덤 가로줄 생성
   let crossings = genCrossings(count, 12);
   drawLadder(count, crossings, starts, ends);
   let mapping = runLadder(count, crossings);
@@ -34,8 +37,8 @@ function startLadderGame() {
 function genCrossings(count, numLines){
   let cross = [];
   for(let l=0; l<numLines; l++){
-    let x = Math.floor(Math.random()*(count-1));  // 어느 줄에 놓을건지
-    let y = 36 + l*22; // y좌표(높이) 간격 조정
+    let x = Math.floor(Math.random()*(count-1));  // 줄 중 하나 선택
+    let y = 36 + l*22; // y좌표 간격 조정
     cross.push({x:x, y:y});
   }
   return cross;
@@ -50,7 +53,6 @@ function drawLadder(count, crossings, starts, ends){
   for(let i=0; i<count; i++){
     container.innerHTML += `<div class='ladder-start' style="left:${width + i*gap}px;">${starts[i]}</div>`;
     container.innerHTML += `<div class='ladder-end' style="left:${width + i*gap}px;">${ends[i]}</div>`;
-    // 세로 줄
     container.innerHTML += `<div class='ladder-line ladder-vertical' style="left:${width + i*gap + 28}px;top:34px;"></div>`;
   }
   // 가로줄
@@ -61,15 +63,13 @@ function drawLadder(count, crossings, starts, ends){
 
 // 사다리 이동 결과 계산
 function runLadder(count, crossings){
-  // 각 출발점에서 끝까지 이동
   let result = [];
   for(let start=0; start<count; start++){
     let x = start;
     for(let i=0, y=36;i<crossings.length;i++,y+=22){
-      // 이 y에서 가로줄이 있으면 x 이동
+      // 해당 y에서 가로줄이 있으면 x 이동
       const found = crossings.filter(c=>c.y===y && (c.x===x || c.x===x-1));
       if(found.length){
-        // 오른쪽에 가로줄이 있으면 오른쪽으로
         if(found[0].x===x) x++;
         else if(found[0].x===x-1) x--;
       }

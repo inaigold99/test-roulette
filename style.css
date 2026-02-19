@@ -1,18 +1,16 @@
 body {
   font-family: 'Noto Sans KR', sans-serif;
   text-align: center;
-  background: #f5faff;
+  background: #f1faff;
   margin: 0;
   padding: 0;
 }
-section {
-  margin: 20px auto;
-}
-input[type=number] {
-  width: 60px;
+input[type=number], input[type=text] {
   font-size: 1rem;
   padding: 3px;
+  border-radius: 5px;
 }
+
 #ladderContainer {
   margin: 40px auto 20px;
   position: relative;
@@ -23,6 +21,7 @@ input[type=number] {
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   overflow-x: auto;
 }
+
 .ladder-start, .ladder-end {
   position: absolute;
   width: 60px;
@@ -51,4 +50,16 @@ input[type=number] {
   border-radius: 12px;
   width: 330px;
   font-size: 1.2rem;
+}
+button {
+  font-size: 1rem;
+  padding: 6px 18px;
+  border-radius: 8px;
+  border: none;
+  background: #44b;
+  color: #fff;
+  margin: 6px;
+}
+button:hover {
+  background: #226;
 }

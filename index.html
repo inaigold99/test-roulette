@@ -7,20 +7,12 @@
 </head>
 <body>
   <h2>사다리 게임 (최대 7명)</h2>
-  <section>
-    <label>
-      참가자 수 (1~7):
-      <input type="number" id="playerCount" min="1" max="7" value="3">
-    </label>
-    <button onclick="setupFields()">참가자 이름/상품 입력</button>
-  </section>
-  <form id="ladderForm" style="display:none;">
-    <h3>시작지점 이름 입력</h3>
-    <div id="startNames"></div>
-    <h3>끝지점 상품 입력</h3>
-    <div id="endNames"></div>
-    <button type="button" onclick="startLadderGame()">Start!</button>
-  </form>
+  <div id="step1">
+    참가자 수 (1~7): 
+    <input type="number" id="playerCount" min="1" max="7" value="3">
+    <button onclick="confirmPlayerCount()">확인</button>
+  </div>
+  <div id="setupArea" style="display:none; margin-top:20px;"></div>
   <div id="ladderContainer"></div>
   <div id="results"></div>
   <script src="script.js"></script>
