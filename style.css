@@ -12,35 +12,32 @@ input[type=number], input[type=text] {
 }
 
 #ladderContainer {
-  position: relative; /* 자식 요소(absolute)들의 기준점 */
-  margin: 40px auto;
+  position: relative; /* 모든 자식 요소의 기준점 */
+  margin: 50px auto;
   background: #fff;
   border-radius: 20px;
-  overflow: visible;  /* 내용이 늘어나도 잘리지 않음 */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  overflow: visible; /* 스크롤바 없이 전체 표시 */
 }
 
 .ladder-start, .ladder-end {
   position: absolute;
-  width: 100px;       /* 텍스트 너비 넉넉히 확보 */
+  width: 80px; /* 이름/상품 너비 제한 */
   text-align: center;
-  transform: translateX(-50%); /* 핵심: 설정된 left 좌표를 기준으로 중앙 정렬 */
+  transform: translateX(-50%); /* 정확히 선 중앙에 배치 */
   font-weight: bold;
-  z-index: 10;
+  font-size: 14px;
+  line-height: 1.2;
 }
 
 .ladder-line {
   position: absolute;
-  background: #444;
+  background: #444; /* 사다리 선 색상 */
   border-radius: 2px;
 }
 
-.ladder-vertical {
-  width: 4px;
-}
-
-.ladder-horizontal {
-  height: 4px;
-}
+.ladder-vertical { width: 4px; }
+.ladder-horizontal { height: 4px; }
 
 .result-item {
   margin: 6px auto;

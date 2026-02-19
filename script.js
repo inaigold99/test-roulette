@@ -44,61 +44,59 @@ function genCrossings(count, numLines){
   return cross;
 }
 
-// 사다리 그리기
+// 사다리 그리기 - 좌표 계산 완전 수정
 function drawLadder(count, crossings, starts, ends) {
   const container = document.getElementById('ladderContainer');
   container.innerHTML = '';
   
   const startX = 60;      // 왼쪽 시작 여백
-  const gap = 80;        // 줄 사이 간격 (7명 입력 시에도 넉넉함)
-  const ladderTop = 60;   // 사다리 세로선이 시작되는 y좌표
-  const ladderHeight = 300; // 사다리 세로선의 순수 길이
+  const gap = 80;         // 줄 사이 간격
+  const ladderTop = 60;   // 세로선 시작 Y좌표
+  const ladderHeight = 350; // 세로선 길이 (가로줄들이 이 안에 그려짐)
 
-  // 1. 컨테이너 너비를 인원수에 맞게 동적으로 확장 (스크롤 방지)
-  const totalWidth = startX * 2 + (count - 1) * gap;
-  container.style.width = totalWidth + "px";
-  container.style.height = (ladderTop + ladderHeight + 80) + "px"; // 세로 높이도 자동 확보
+  // 컨테이너 크기 동적 조절 (7명 입력 시에도 여유로움)
+  container.style.width = (startX * 2 + (count - 1) * gap) + "px";
+  container.style.height = (ladderTop + ladderHeight + 80) + "px";
 
   for (let i = 0; i < count; i++) {
     const currentX = startX + i * gap;
     
-    // 2. 시작 이름 (상단)
-    // transform: translateX(-50%)와 조합되어 선 중앙에 위치함
+    // 1. 이름 (상단) - 선 중앙 정렬
     container.innerHTML += `<div class='ladder-start' style="left:${currentX}px; top:20px;">${starts[i]}</div>`;
     
-    // 3. 세로줄 
-    // 선의 두께(4px) 절반인 2px를 빼서 정확히 중앙에 배치
+    // 2. 세로줄 - 두께 보정(-2px)
     container.innerHTML += `<div class='ladder-line ladder-vertical' style="left:${currentX - 2}px; top:${ladderTop}px; height:${ladderHeight}px;"></div>`;
     
-    // 4. 끝지점 상품 (하단)
-    // 세로줄이 끝나는 지점(ladderTop + ladderHeight)에서 20px 여유를 둠
-    container.innerHTML += `<div class='ladder-end' style="left:${currentX}px; top:${ladderTop + ladderHeight + 20}px;">${ends[i]}</div>`;
+    // 3. 상품 (하단) - 세로줄 바로 아래 배치
+    container.innerHTML += `<div class='ladder-end' style="left:${currentX}px; top:${ladderTop + ladderHeight + 15}px;">${ends[i]}</div>`;
   }
 
-  // 5. 가로줄 (다리)
+  // 4. 가로줄 (다리) - 생성된 y값이 세로줄 범위 내에 오도록 보정
   crossings.forEach((c) => {
     const bridgeX = startX + c.x * gap;
-    // 세로선 사이를 정확히 잇도록 너비를 gap으로 설정
-    // c.y 값이 너무 크면 세로선 범위를 벗어나므로 보정 (c.y를 0~ladderHeight 사이로 가정)
-    const bridgeY = ladderTop + (c.y % ladderHeight); 
+    // genCrossings의 y값이 ladderHeight를 넘지 않도록 위치 계산
+    const bridgeY = ladderTop + (c.y % (ladderHeight - 40)) + 20; 
     container.innerHTML += `<div class='ladder-line ladder-horizontal' style="left:${bridgeX}px; top:${bridgeY}px; width:${gap}px;"></div>`;
   });
 }
 
-// 사다리 이동 결과 계산
+// 사다리 결과 계산 로직 보정 (가로줄 좌표 일치)
 function runLadder(count, crossings){
   let result = [];
+  // 각 출발점에서 끝까지 탐색
   for(let start=0; start<count; start++){
-    let x = start;
-    for(let i=0, y=36;i<crossings.length;i++,y+=22){
-      // 해당 y에서 가로줄이 있으면 x 이동
-      const found = crossings.filter(c=>c.y===y && (c.x===x || c.x===x-1));
-      if(found.length){
-        if(found[0].x===x) x++;
-        else if(found[0].x===x-1) x--;
+    let currentPos = start;
+    // 가로줄을 y좌표 순으로 정렬하여 차례대로 타야 함
+    let sortedCross = [...crossings].sort((a,b) => a.y - b.y);
+    
+    sortedCross.forEach(c => {
+      if(c.x === currentPos) {
+        currentPos++; // 오른쪽 이동
+      } else if(c.x === currentPos - 1) {
+        currentPos--; // 왼쪽 이동
       }
-    }
-    result.push(x);
+    });
+    result.push(currentPos);
   }
   return result;
 }
