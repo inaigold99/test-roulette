@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>확장형 h 마블 룰렛</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>확장형 마블 룰렛 (3개, 장애물 포함)</h2>
+  <div class="h-container">
+    <div class="left-bar"></div>
+    <div class="middle-bar1"></div>
+    <div class="middle-bar2"></div>
+    <div class="middle-bar3"></div>
+    <div class="right-bar"></div>
+    <!-- 장애물 -->
+    <div class="obstacle" style="left:70px;top:100px;"></div>
+    <div class="obstacle" style="left:150px;top:180px;"></div>
+    <div class="obstacle" style="left:70px;top:220px;"></div>
+    <!-- 결과 -->
+    <div class="result left">A</div>
+    <div class="result right">B</div>
+    <!-- 마블 3개 -->
+    <div id="marble1" class="marble" style="left:45px;top:0;"></div>
+    <div id="marble2" class="marble" style="left:105px;top:0;"></div>
+    <div id="marble3" class="marble" style="left:165px;top:0;"></div>
+  </div>
+  <button onclick="startMarbles()">마블 굴리기</button>
+  <div id="finalResult" class="final-result"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
